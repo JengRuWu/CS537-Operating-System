@@ -1,0 +1,35 @@
+<P1A>
+1. reverse.c
+    a. getline() to extract the lines, and store them in char**line
+    b. write a function to reverse content in every line
+    c. write the lines in reverse order into the output file
+
+2. wis-tar.c
+    a. open .tar archive in main()
+    b. write a function addfile() to add the files into .tar
+        (1) memset() to make a filename with 256 bytes
+        (2) get file size with stat()
+        (3) write filename and size into .tar
+        (4) fread(), fwrite() the contents into .tar
+        (5) add 8 NULL
+
+<P1B>
+I have changed the following file to build getwritecount().
+getwritecount() should return the number of times that write() syscall has been invoked by the calling process.
+
+1. include/
+    a. syscall.h - asign a number(22) to the system call
+
+2. user/
+    a. getwritecount.c - create user program for testing 
+    b. makefile.mk - add make for user program getwritecount.c 
+    c. user.h -  add "int getwritecount(void);"  to make the systemcall usable
+    d. usys.S - add "SYSCALL(getwritecount)"
+
+3. kernel/
+    a. syscall.c - add in "[SYS_getwritecount]  sys_getwritecount" for the kernel to look up syscall with syscall number
+    b. sysfunc.h - add in "int sys_getwritecount(void);"
+    c. proc.h - put "write_count" into the per-process state struct proc
+    d. proc.c - set the "writer_count" to 0 at allocproc(), as this is where every process is allocated
+    e. sysfile.c - add "proc->write_count++" in write()
+    f. sysproc.c - add the system call "sys_getwritecount(void)" to return the "proc->write_count"
