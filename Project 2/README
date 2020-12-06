@@ -1,0 +1,49 @@
+Author: Jeng-Ru Wu
+Netid: jwu532
+
+<P2A>
+1. Read from the input and parse with strtok_r
+2. Mark corresponding flags while parsing: input redirection, output redirection, pipeline and background execution
+3. Deal with built-in functions
+4. fork()
+5. if there are input/output redirections, replace the standard input/output with dup2()
+6.  a. if not pipeline, pass the commands to execvp()
+    b. if pipeline, fork() to make a grandchild, and run execvp on child and grandchild
+7.  a. if background executin:
+        (1). in parent, put every background child into a list
+        (2) if the background child return to waitpid, delete it from the list. 
+        (3) Eventually before we call exit, we kill every background child in the list.
+    b. if not background, wait for the child before proceed
+
+
+<P2B>
+I have changed the following file to build getwritecount().
+
+1. Newly create /include/pstat.h 
+
+2. Modified the following pages for three system calls: setpri(), getpri(), and getpinfo() 
+/include/syscall.h
+/kernel/syscall.c
+/user/user.h
+/user/usys.S
+/kernel/sysproc.c
+/kernel/sysfunc.h
+
+3. Modified this page for three functions that the three system calls call: setpri(), getpri() and getpinfo()
+/kernel/defs.h
+
+4. Added in new fields (priority, ticks[4], qtail[4]) in the per-process states, so we can copy this information to getpinfo()
+/kernel/proc.h
+
+5. Modify allocproc(), userinit(), fork(), scheduler(), yield(), getpri(), setpri() and getpinfo()
+/kernel/proc.c
+    a. Created four list pri0[], pri1[], pri2[] and pri3[] to store processes from each priority level
+    b. In allocproc(), set per-process states qtail[4] and ticks[4] to 0
+    c. In userinit(), set the priority to 3 and put it in pri3[]
+    d. In fork(), let the child inherit the parent's priority level and put the child in corresponding priority queue
+    e. In scheduler(), go through each priority queue to look for RUNNABLE processes to run
+    f. evreytime yield() is called, increse ticks[p->priority] by 1
+    g. everytime yield() is called or the process sleeps, always check if any process with higher priority is runnable  
+    h. if ticks[p->priority] reaches its maximum, move the process to the back of the queue and increase qtail[p->priority] by 1
+    i. put three functions getpri(), setpri() and getpinfo() in proc.c too
+
