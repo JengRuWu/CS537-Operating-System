@@ -10,7 +10,7 @@ Netid: jwu532
 6.  a. if not pipeline, pass the commands to execvp()
     b. if pipeline, fork() to make a grandchild, and run execvp on child and grandchild
 7.  a. if background executin:
-        (1). in parent, put every background child into a list
+        (1) in parent, put every background child into a list
         (2) if the background child return to waitpid, delete it from the list. 
         (3) Eventually before we call exit, we kill every background child in the list.
     b. if not background, wait for the child before proceed
