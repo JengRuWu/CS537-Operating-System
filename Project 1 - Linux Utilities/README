@@ -1,3 +1,5 @@
+Author: Jeng-Ru Wu
+
 <P1A>
 1. reverse.c
     a. getline() to extract the lines, and store them in char**line

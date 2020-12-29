@@ -1,0 +1,67 @@
+Project 4B: xv6 Kernel Threads
+Objectives
+There are two objectives to this assignment:
+
+To build a small thread library in xv6 using two new system calls: clone() and join().
+To add some concurrency to your library using spin locks and condition variables.
+Overview
+In this project, you'll be adding real kernel threads to xv6. Sound like fun? Well, it should. Because you are on your way to becoming a real kernel hacker. And what could be more fun than that?
+
+Specifically, you'll do three things.
+
+First, you'll define a new system call to create a kernel thread, called clone(), as well as one to wait for a thread called join().
+Second, you'll use clone() and join() to build a little thread library, with thread_create() / thread_join().
+Third, you'll extend the library with some synchronization mechanisms by adding a simple spinlock with lock_acquire() / lock_release(), and a condition variable with cond_wait() / cond_signal() and add 3 new system calls for the condition variables.
+That's it! And now, for some details.
+
+Details
+Part 1: kernel threads
+Your new clone system call should look like this: int clone(void(*fcn)(void*), void *arg, void *stack) . This call creates a new kernel thread that shares the calling process's address space. File descriptors are copied as in fork. The new process uses stack as its user stack, which is passed the given argument arg and uses a fake return PC (0xffffffff). You can exit a thread by adding a handler for this exact address to kill the process. The stack should be one page in size. The new thread starts executing at the address specified by fcn . Looks familiar? Yes! It's very similar to exec() ! As with fork(), the PID of the new thread is returned to the parent.
+
+There are a few assumptions upon thread creation:
+
+The parameter arg in clone() can be a NULL pointer, and clone() should not fail.
+The thread can clone another thread but will not fork another process.
+When thread A clones another thread B, the parent of thread B should be A, NOT the parent of A. Note that the parent of thread A, thread A and thread B should share the same address space.
+You can assume that a process will have at most 8 threads within it (NTHREADS = 8). [Update Nov 9] The main thread (the one created with the process) doesn't count as one of eight.
+Another new system call is int join(void **stack) . This call waits for a child thread that shares the address space with the calling process. It returns the PID of waited-for child or -1 if none. The location of the child's user stack is copied into the argument stack .
+
+For example, process A clones thread B and C, now A calls join(); A waits for whichever thread finishes first.
+
+Note that if B clones another thread D, then A will never wait for D as D's parent is B.
+
+You also need to think about the semantics of existing system calls. For example, wait() should wait for a child process that does not share the address space with this process. It should also free the address space if this is the last reference to it.
+
+Part 2: thread library
+Your thread library will be built on top of this, and just have a simple int thread_create(void (*start_routine)(void*), void *arg) routine. This routine should call malloc() to create a new user stack and use clone() to create the child thread and get it running. A int thread_join() call should also be created, which calls the underlying join() system call, frees the user stack, and then returns the id of the joined thread.
+
+Part 3: synchronization mechanisms
+Next, your thread library should have the following synchronization mechanisms
+
+A simple spinlock: There should be a type lock_t that one uses to declare a lock, and two routines void lock_acquire(lock_t *) and void lock_release(lock_t *) , which acquire and release the lock. The spin lock should use x86 atomic exchange to built the spinlock (see the file spinlock.c inside the kernel folder for an example of something close to what you need to do). Another routine, void lock_init(lock_t *) , is used to initialize the lock as need be. This lock should be implemented in user mode.
+Condition variable: there should be a type cond_t that one uses to declare a condition variable, and two routines void cond_wait(cond_t *, lock_t *) and void cond_signal(cond_t *) , which wait and signal the CV. You may want to look at what sleep() and wakeup() do in kernel/proc.c for some hints. One last routine void cond_init(cond_t *) , is used to initialize the CV as need be. NOTE: You will need to add 3 new system calls to implement these respective functions, but we will not test them directly so you can name them however you like. The condition variable should be implemented in kernel mode.
+Hint: be careful about the interaction between condition variables and the corresponding spinlock! Reason through what might be the potential race conditions (e.g. waiting & being woken up etc).
+
+Your condition variable should operate in the following fashion:
+
+cond_t
+
+The condition variable should have a queue of size NTHREADS to hold waiting threads (HINT: you can keep a head and tail to form a circular queue).
+The queue should have a lock protecting it (using the same atomic exchange logic).
+cond_wait()
+
+cond_wait should panic (or throw some error) if the calling thread had not acquired the lock or if the queue is full.
+A thread calling cond_wait should acquire the queue's lock, add itself to the queue, put itself to sleep, and release both the calling lock and the queue lock. Once it has been woken up, it should spin until it can reacquire the calling lock and then proceed.
+cond_signal()
+
+A thread calling cond_signal should acquire the queue lock, wake up the thread at the head of the queue, and release the queue lock.
+One thing you need to be careful with is when an address space is grown by a thread in a multi-threaded process. Trace this code path carefully and see where a new lock is needed and what else needs to be updated to grow an address space in a multi-threaded process correctly.
+
+One last HINT: To add a user thread library, you'll need to create it in the user folder and modify the makefile so that xv6 can provide it to the userspace.
+
+Have fun!
+
+The Start Code
+We suggest that you start from the source code of xv6, instead of your own code from previous projects as bugs may propagate and affect this project. You may refer to p1b's description for the instructions on getting the xv6 source code. 
+
+You may also find the following book about xv6 useful, written by the same team that ported xv6 to x86: book (Links to an external site.). However, note that the kernel version we use is a little different than the book.

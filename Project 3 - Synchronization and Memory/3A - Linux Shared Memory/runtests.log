@@ -1,0 +1,293 @@
+starting build
+
+**********************************************************************
+
+Test build
+build project using make
+
+**********************************************************************
+Trying to clean project using make clean
+make clean
+rm -f shm_client
+rm -f shm_server
+Trying to build project using make
+make
+gcc shm_client.c -o shm_client -Wall -Werror -lrt -lpthread
+gcc shm_server.c -o shm_server -Wall -Werror -lrt -lpthread
+
+
+test build PASSED
+ (build project using make)
+
+starting client_without_server
+
+**********************************************************************
+
+Test client_without_server
+Client should exit gracefully if no server is running
+
+**********************************************************************
+
+
+test client_without_server PASSED (5 of 5)
+ (Client should exit gracefully if no server is running)
+
+starting one_client
+
+**********************************************************************
+
+Test one_client
+Test basic functionality for one client & server
+
+**********************************************************************
+
+
+test one_client PASSED (10 of 10)
+ (Test basic functionality for one client & server)
+
+starting two_clients
+
+**********************************************************************
+
+Test two_clients
+Check that 2 clients can run concurrently
+
+**********************************************************************
+
+
+test two_clients PASSED (10 of 10)
+ (Check that 2 clients can run concurrently)
+
+starting five_clients
+
+**********************************************************************
+
+Test five_clients
+Check that 5 clients can run concurrently
+
+**********************************************************************
+
+
+test five_clients PASSED (10 of 10)
+ (Check that 5 clients can run concurrently)
+
+starting many_clients
+
+**********************************************************************
+
+Test many_clients
+Check that up to maxClients clients can run concurrently
+
+**********************************************************************
+
+
+test many_clients PASSED (10 of 10)
+ (Check that up to maxClients clients can run concurrently)
+
+starting clients_leave
+
+**********************************************************************
+
+Test clients_leave
+Check for consistent outputs from server and clients when client leave and reenter
+
+**********************************************************************
+19568 3 3
+19569 9 9
+19571 3 3
+19567 9 9
+
+
+test clients_leave PASSED (10 of 10)
+ (Check for consistent outputs from server and clients when client leave and reenter)
+
+starting clients_leave2
+
+**********************************************************************
+
+Test clients_leave2
+Check for consistent outputs from server and all clients when 1 client leaves and reenters
+
+**********************************************************************
+19592 15 15
+19593 5 5
+19594 15 15
+19595 15 15
+19596 15 15
+19597 15 15
+19598 15 15
+19599 15 15
+19600 15 15
+19601 15 15
+19602 15 15
+19603 15 15
+19604 15 15
+19605 15 15
+19606 15 15
+19607 15 15
+19608 15 15
+19609 15 15
+19610 15 15
+19611 15 15
+19612 15 15
+19613 15 15
+19614 15 15
+19615 15 15
+19616 15 15
+19617 15 15
+19618 15 15
+19619 15 15
+19620 15 15
+19621 15 15
+19622 15 15
+19623 15 15
+19624 15 15
+19625 15 15
+19626 15 15
+19627 15 15
+19628 15 15
+19629 15 15
+19630 15 15
+19631 15 15
+19632 15 15
+19633 15 15
+19634 15 15
+19635 15 15
+19636 15 15
+19637 15 15
+19638 15 15
+19639 15 15
+19640 15 15
+19641 15 15
+19642 15 15
+19643 15 15
+19644 15 15
+19645 15 15
+19646 15 15
+19647 15 15
+19648 15 15
+19649 15 15
+19650 15 15
+19651 15 15
+19652 15 15
+19653 15 15
+19654 15 15
+19665 4 5
+
+
+test clients_leave2 PASSED (10 of 10)
+ (Check for consistent outputs from server and all clients when 1 client leaves and reenters)
+
+starting clients_all_leave
+
+**********************************************************************
+
+Test clients_all_leave
+Check for consistent outputs from server and clients when all clients leave and reenter
+
+**********************************************************************
+19744 4 4
+19746 5 5
+19747 5 5
+19748 5 5
+19749 5 5
+19750 5 5
+19751 5 5
+19752 5 5
+19753 5 5
+19754 4 5
+19755 4 5
+19735 5 5
+19736 5 5
+19737 5 5
+19738 5 5
+19739 5 5
+19740 5 5
+19741 5 5
+19742 5 5
+19743 5 5
+
+
+test clients_all_leave PASSED (10 of 10)
+ (Check for consistent outputs from server and clients when all clients leave and reenter)
+
+starting unlink_memory
+
+**********************************************************************
+
+Test unlink_memory
+Test if memory has been unlinked when server terminates
+
+**********************************************************************
+
+
+test unlink_memory PASSED (10 of 10)
+ (Test if memory has been unlinked when server terminates)
+
+starting arg_check
+
+**********************************************************************
+
+Test arg_check
+Check command line argument length for client
+
+**********************************************************************
+
+
+test arg_check PASSED (5 of 5)
+ (Check command line argument length for client)
+
+starting valgrind
+
+**********************************************************************
+
+Test valgrind
+essentially, clients_leave2 run for longer and with valgrind
+
+**********************************************************************
+
+
+test valgrind PASSED (10 of 10)
+ (essentially, clients_leave2 run for longer and with valgrind)
+
+**********************************************************************
+Summary:
+test build PASSED
+ (build project using make)
+
+test client_without_server PASSED (5 of 5)
+ (Client should exit gracefully if no server is running)
+
+test one_client PASSED (10 of 10)
+ (Test basic functionality for one client & server)
+
+test two_clients PASSED (10 of 10)
+ (Check that 2 clients can run concurrently)
+
+test five_clients PASSED (10 of 10)
+ (Check that 5 clients can run concurrently)
+
+test many_clients PASSED (10 of 10)
+ (Check that up to maxClients clients can run concurrently)
+
+test clients_leave PASSED (10 of 10)
+ (Check for consistent outputs from server and clients when client leave and reenter)
+
+test clients_leave2 PASSED (10 of 10)
+ (Check for consistent outputs from server and all clients when 1 client leaves and reenters)
+
+test clients_all_leave PASSED (10 of 10)
+ (Check for consistent outputs from server and clients when all clients leave and reenter)
+
+test unlink_memory PASSED (10 of 10)
+ (Test if memory has been unlinked when server terminates)
+
+test arg_check PASSED (5 of 5)
+ (Check command line argument length for client)
+
+test valgrind PASSED (10 of 10)
+ (essentially, clients_leave2 run for longer and with valgrind)
+
+Passed 12 of 12 tests.
+Overall 12 of 12
+Points 100 of 100

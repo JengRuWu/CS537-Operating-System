@@ -1,0 +1,51 @@
+Author: Jeng-Ru Wu, Feena Toms
+
+<P3A>
+Shm_server
+1. Implemented sigaction() for signal handler
+2. Create a new shared memory segment with shm_open()
+3. Truncate the shared memory segment to 1 page with ftruncate()
+4. Map the memory with mmap() 
+5. Point mutex to the beginning of the mapped memory and initiate mutex
+6. Allocate the rest of the page (excluding the 64 bytes for mutex) with union structure
+7. Set all pids of the union structures to be -1, indicating unused
+8. Iterate to print out all client states
+
+Shm_client
+1. Implemented sigaction() for signal handler
+2. Create a new shared memory segment with shm_open()
+3. Truncate the shared memory segment to 1 page with ftruncate()
+4. Map the memory with mmap() 
+5. Get mutex at beginning of the mapped memory
+6. Enter critical section to grab an unused block (pid = -1)
+7. Use gettimeofday to get the start of the elapsed times
+8. Use time() and ctime() to get birth time
+9. Save pid to the block’s pid (so it won’t be used by other processes) and leave critical section
+10. Iterate to save the elapsed times into the the data structure and print out all processes
+
+
+<P3B>
+1. Proc.h
+    a. Created “st” in per-process state to track the bottom of stack of each process
+2. Exec.c
+    a. Updated sz variable to start from 2*PGSIZE
+    b. Created a variable “st” to store the stack address, and set it as USERTOP - PGSIZE
+    c. Load stack into st instead of sz
+    d. Save st to proc->st
+3. Proc.c
+    a. Updated sz variable of process inside userinit() to 3*PGSIZE 
+    b. Made changes to p->tf->esp and p->tf->eip
+    c. Set proc->st in userinit() and fork()
+    d. Modified growproc() to limit heap from reaching within five pages below stack
+4. Defs.h
+    a. Add one more field to copyuvm(), so that it could take one more argument “st”
+5. Vm.c
+    a. Modified copyuvm(), so that it copies the stack too
+    b. Made changes to inituvm() to map pages starting from 2*PGSIZE instead of 0
+    c. Made changes to copyuvm() to copy starting from 2*PGSIZE
+6. Trap.c
+    a. If the system is trapped because of page fault (tf->trapno == T_PGFLT), see where the page fault occurs. If the page fault occurs within one page below the bottom of stack, grow stack. Also checks if the gaps between heap and stack >= 5
+7. Syscall.c
+    a. Modified fetching(), fetchstr() and argint(), so they uses st, sz and the new  null-pointer as reference
+8. Makefiles
+    a. Made changes to both the kernel and user makefiles

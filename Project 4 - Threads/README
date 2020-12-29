@@ -1,0 +1,48 @@
+Author: Jeng-Ru Wu
+Netid: jwu532
+
+<P4A>
+I have developed a scalable web server, using thread operations. There are three command line arguments:
+port: the port number that the web server should listen on; the basic web server already handles this argument.
+threads: the number of worker threads that should be created within the web server. Must be a positive integer.
+buffers: the number of request connections that can be accepted at one time. Must be a positive integer. Note that it is not an error for more or less threads to be created than buffers.
+
+<P4B>
+Part 1 Kernel Thread (done)
+Syscall.h - add sys_clone & sys_ join
+Defs.h - add clone() and join() under proc.c
+Proc.c
+Write clone() 
+Write join()
+Modify wait() to not wait for threads and not free the pgdir if other threads are using
+Modify growproc() to update pgdir for all threads sharing the pgdir
+Proc.h- add in per -process state: stack
+Syscall..c  - add sys_clone & sys_ join
+Sysfunc.h - add sys_clone & sys_ join
+Sysproc.c - link sys_clone & sys_join to clone() and join()
+User.h - add in the two system calls
+usys.S - add in the two system calls
+
+Part 2 Thread Library (done)
+user/makefile.mk
+user/bin/forktest: user/forktest.o user/ulib.o user/usys.o user/umalloc.o | user/bin
+Ulib.c - write the two routine thread_create() and  thread_join()
+User.h - add in the two routine calls
+
+Part 3 Synchronization Mechanisms
+Locks
+types.h - define lock_t 
+Ulib.c - write the routine calls:  lock_init(), lock_acquire() & lock_release()
+User.h - add in the routine calls
+JR - Nov 11
+Conditional Variables
+types.h - define cond_t 
+Syscall.h - add sys_twake, sys_ tsleep & sys_cvinit
+Defs.h - add twake(), tsleep() & cvinit() under proc.c
+Proc.c- write twake(), tsleep() & cvinit()
+Syscall..c  - add sys_twake, sys_ tsleep & sys_cvinit
+Sysfunc.h - add sys_twake, sys_ tsleep & sys_cvinit
+Sysproc.c - link sys_twake, sys_ tsleep & sys_cvinit to twake(), tsleep() & cvinit()
+User.h - add in the three system calls, and the three routine calls cond_init(), cond_wiat & cond_signal
+usys.S - add in the three system calls
+Ulib.c - write the three routine calls cond_init(), cond_wiat & cond_signal
