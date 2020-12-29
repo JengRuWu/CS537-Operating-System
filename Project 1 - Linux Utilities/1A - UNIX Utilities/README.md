@@ -65,7 +65,7 @@ and exit with `exit(1)` to return an error.
 - Another good reference page you could turn to is [cppreference.com](http://cppreference.com "cppreference.com"). Just search the functions you want to know and select the C version (instead of C++ version) of reference pages. These references usually come with some examples, which can be useful.
  
 
-# II. Wis-tar
+## II. Wis-tar
 The next utility you build will be a simpler version of tar, which is a commonly used UNIX utility to combine a collection of files into one file. 
 
 The input to your wis-tar program will be the name of the tar file followed by a list of files that need to be archived. (Fun Fact: The name tar comes from tape archives!)
@@ -122,7 +122,7 @@ and exit with status 1.
 - **[Update Sept 13]** You could use uint64_t as file size, which guarantees will take 8 bytes. (Need to #include <stdint.h>)
 - General hints in the reversing program can also be applicable.
 
-# General Advice
+## General Advice
 **Start small, and get things working incrementally.** For example, first get a program that simply reads in the input file, one line at a time, and prints out what it reads in. Then, slowly add features and test them as you go.
 
 **Testing is critical.** Testing your code to make sure it works is crucial. Write tests to see if your code handles all the cases you think it should. Be as comprehensive as you can be. Of course, when grading your projects, we will be. Thus, it is better if you find your bugs first before we do.
@@ -133,7 +133,7 @@ and exit with status 1.
 
 **Read the documentation.** Even the best programmer can't remember every detail of how to use these library functions. Read man page can be extremely helpful.
 
-# Turning it in
+## Turning it in
 You should only turn in two files: reverse.c and wis-tar.c . We will compile them in the following way:
 
 ```
@@ -149,7 +149,7 @@ $ cp reverse.c ~cs537-10/handin/$USER/p1/linux
 # $USER will be replaced with your CS login username automatically by the shell
 $ cp wis-tar.c ~cs537-10/handin/$USER/p1/linux
 ```
-# WHAT WE WILL LOOK FOR
+## WHAT WE WILL LOOK FOR
 - General implementation: Does the code work on simple files?
 - Boundary case handling: Does the code work on more complex files (e.g. zero-length lines, long lines, very long files)
 
