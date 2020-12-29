@@ -1,23 +1,25 @@
-Project 1A: UNIX Utilities
-Changelog:
+## Project 1A: UNIX Utilities
+Changelog (marked with underline):
+**[Update Sept 13]** add wis-untar program and test instruction
+**[Update Sept 13]** add specification on file size type
+**[Update Sept 17]** add clarifications
+**[Update Sept 19]** remove trailing space in "Usage: wis-tar ..."
+**[Update Sept 19]** add test script instructions
 
-[Update Sept 13] add wis-untar program and test instruction
-[Update Sept 13] add specification on file size type
-[Update Sept 17] add clarifications
-[Update Sept 19] remove trailing space in "Usage: wis-tar ..."
-[Update Sept 19] add test script instructions
 ---
 
 This is part A of project 1. In this part, we will write two small programs to get familiar with file IO and string manipulation.
 
-I. Reversing
+### I. Reversing
 You will write a reversing program. (Don't worry, we promise there won't be any spoiler of the movie Tenet in this project.) It should read input from a file, reverse the line order, then reverse the character order within each line, and finally print the result to another file. For example, with this input:
 
+```
 first-1
 second-2
 third-3
 fourth-4
 fifth-5
+```
 the program should produce this output:
 
 5-htfif
