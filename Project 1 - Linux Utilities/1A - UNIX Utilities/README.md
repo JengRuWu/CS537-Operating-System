@@ -1,4 +1,4 @@
-##Project 1A: UNIX Utilities
+## Project 1A: UNIX Utilities
 Changelog (marked with underline):
 **[Update Sept 13]** add wis-untar program and test instruction
 **[Update Sept 13]** add specification on file size type
